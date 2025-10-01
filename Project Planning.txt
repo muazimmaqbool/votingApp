@@ -10,4 +10,5 @@ Important: whenever you create an project first clear these basic things like:
         1. user sigin and signup
         2. see the list of candidates
         3. vote one of the candidates, after Voting user can't vote again.
-        4. 
+        4. Ther should be a route which shows the list of candidates and their live  vote counts sorted by their vote count
+        5. User data must contain their one unique goverment id proof (example: aadhar card number)
