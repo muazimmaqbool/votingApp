@@ -51,3 +51,5 @@
                 >create two functions jwtAuthMiddleware and generateToken
         6)Created User Route: inside Routes folder: userRoutes.js
                 >Inside userRoutes.js different routes/endpoints/APIs are defined
+        7)Defined comparePassword method in user.js Schema
+        8)Inside user.js added userSchema.pre middleware which is used to has the password
