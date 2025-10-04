@@ -7,7 +7,7 @@ const jwtAuthMiddleware=(req,res,next)=>{
     if(!authorization) return res.status(401).json({error:"Token Not Found!"})
     //extracting token from header
     const token=req.headers.authorization.split(' ')[1]; 
-    //ff token is not passed:
+    //if token is not passed:
     if(!token){
         res.status(401).json({error:'Unauthorized'})
     }
