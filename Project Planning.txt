@@ -44,4 +44,6 @@
         2)Added basic things in server.js file like : importing express, body parser, app.listen
         3)Installed mongoose
         4)Created Models folder and added different models in it:
-                Example: user.js
+                Example: 
+                1)user.js 
+                2)candidate.js
