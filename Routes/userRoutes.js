@@ -50,3 +50,18 @@ router.post('/login',async(req,res)=>{
         res.status(500).json({error:"Internal server error"})
     }
 })
+
+//profile route
+router.get('/profile',jwtAuthMiddleware,async(req,res)=>{
+  try{
+    const userData=req.user //basically payload from jwt token
+    //getting id
+    const userId=userData.id;
+    //getting user details
+    const user=await Person.findById(userId)
+    res.status(200).json({userProfile:user})
+  }catch(err){
+    console.log(err)
+    res.status(500).json({error:"Internal server error"})
+  }
+})
