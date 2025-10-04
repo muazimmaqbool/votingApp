@@ -48,5 +48,6 @@
                 1)user.js 
                 2)candidate.js
         5)install jsonwebtoken and create jwt.js file
-                >WQrite
+                >create two functions jwtAuthMiddleware and generateToken
         6)Created User Route: inside Routes folder: userRoutes.js
+                >Inside userRoutes.js different routes/endpoints/APIs are defined
