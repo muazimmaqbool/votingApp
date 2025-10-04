@@ -37,3 +37,10 @@
                 /candidates: POST - Create a new candidate.
                 /candidates/:candidateId: PUT - Update an existing candidate.
                 /candidates/:candidateId: DELETE - Delete a candidate from the list.    
+
+
+//Steps i followed when building this project:
+        1)First installed express
+        2)Added basic things in server.js file like : importing express, body parser, app.listen
+        3)Created Models folder and added different models in it:
+                Example: user.js

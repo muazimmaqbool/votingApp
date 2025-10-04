@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 //importing database connection
-const db = require("./db");
+// const db = require("./db");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json()); //here it will convert the json string/data to js object and save it inside: req.body
