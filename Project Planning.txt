@@ -47,3 +47,6 @@
                 Example: 
                 1)user.js 
                 2)candidate.js
+        5)install jsonwebtoken and create jwt.js file
+                >WQrite
+        6)Created User Route: inside Routes folder: userRoutes.js
