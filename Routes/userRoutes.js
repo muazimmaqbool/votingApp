@@ -65,3 +65,30 @@ router.get('/profile',jwtAuthMiddleware,async(req,res)=>{
     res.status(500).json({error:"Internal server error"})
   }
 })
+
+//route to change the password
+router.put("/profile/password",jwtAuthMiddleware, async (req, res) => {
+  try {
+    const userID = req.user; //getting the id from the jwt payload
+
+    //getting currentpassword and new password from request body
+    const{currentPassword,newPassword}=req.body;
+
+    //checking the user is preent or not by the userId
+    const user=await User.findById(userID)
+
+    //if current password doesn't match then return error
+    if(!(await User.comparePassword(currentPassword))){
+      return res.status(401).json({error:"Invalid current password!"})
+    }
+
+    //updating users password
+    user.password=newPassword
+    await user.save()
+     
+    console.log("Password Updated");
+    res.status(200).json({message:"Password updated"});
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
