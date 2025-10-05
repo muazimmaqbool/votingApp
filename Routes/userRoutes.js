@@ -3,7 +3,8 @@ const router=express.Router();//used to manage routes
 const User=require("../Models/user")
 const {jwtAuthMiddleware,generateToken}=require("../jwt")
 
-//POST request (singup route)
+//POST request (singup route) 
+//api like thid: /user/singup
 router.post("/signup", async (req, res) => {
   try {
     //extracting data from request body
