@@ -55,4 +55,12 @@
         8)Inside user.js added userSchema.pre middleware which is used to has the password
         9)Import router files in server.js file
         10)Implement db connection in db.js file
-        11)
+        11)install more dependencies:
+                bcrypt,
+                body-parser,
+                dotenv,
+                lodash,
+                passport,
+                passport-local,
+                pokemon
+        12)
