@@ -14,6 +14,12 @@ const userRoutes=require("./Routes/userRoutes")
 //using the routers
 app.use('/user',userRoutes)
 
+
+//just for testing: http://localhost:3000/
+app.get("/", (req, res) => {
+  res.send("backend project...");
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
