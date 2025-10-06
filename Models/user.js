@@ -40,6 +40,7 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     }
+    //if role and isVoted is not provided from client still it will take their default value
 })
 
 //used to hash the password before saving it 
