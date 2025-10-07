@@ -4,15 +4,20 @@ const app = express();
 const db = require("./db");
 require("dotenv").config()
 
+const {jwtAuthMiddleware}=require("./jwt")
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.json()); //here it will convert the json string/data to js object and save it inside: req.body
 const PORT=process.env.PORT || 3000
 
 //importing router files
 const userRoutes=require("./Routes/userRoutes")
-
+const candidateRoutes=require("./Routes/candidateRoute")
 //using the routers
 app.use('/user',userRoutes)
+//now every operation/request which goes through /candidate API requires jwt Token
+app.use('/candidate',jwtAuthMiddleware,candidateRoutes)
+
 
 
 //just for testing: http://localhost:3000/

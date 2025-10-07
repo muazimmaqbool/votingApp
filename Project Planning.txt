@@ -63,4 +63,5 @@
                 passport,
                 passport-local,
                 pokemon
-        12)
+        12)Implement candidateRoute.js file
+        13)Import 'jwtAuthMiddleware' inside server.js file
