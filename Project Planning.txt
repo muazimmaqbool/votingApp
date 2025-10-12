@@ -69,3 +69,5 @@
         15)Creating POST request in candidate route
         16)Create a function which make sure that only admin is doing some specific operations : like creating a candidate extracting
                 this functions is inside candidateRoute.js
+        17)Candidates routes for updating and deleteing the data
+        18)

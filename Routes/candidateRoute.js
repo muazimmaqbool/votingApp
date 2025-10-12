@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
   try {
     //checking whether the user is admin or not
     if(!checkAdminRole(req.user.id)){
-        return res.status(404).json({message:'user is not a admin!'})
+        return res.status(403).json({message:'user is not a admin!'})
     }
     const data = req.body; //geting candidate data from request body
     const newCandidate = new Candidate(data); //creating a new candidate document model
@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
 router.put("/:candidateID", async (req, res) => {
   try {
     if(!checkAdminRole(req.params.candidateID)){
-        return res.status(404).json({message:'user is not a admin!'})
+        return res.status(403).json({message:'user is not a admin!'})
     }
     //getting ID
     const candidateId=req.params.candidateID;
@@ -52,9 +52,31 @@ router.put("/:candidateID", async (req, res) => {
         runValidators:true, //runs data validation which is already setup in candidate.js model
     })
     if(!response){
-        return res.status(404).json({error:'Person not found'})
+        return res.status(403).json({error:'Candidate not found'})
     }
     console.log("candidate dara updated",response)
+    res.status(200).json({message:"Caandidate updated"})
+
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//delete route for deleting candidate
+router.delete("/:candidateID", async (req, res) => {
+  try {
+    if(!checkAdminRole(req.params.candidateID)){
+        return res.status(403).json({message:'user is not a admin!'})
+    }
+    //getting ID
+    const candidateId=req.params.candidateID;
+
+    //deleting 
+    const response=await Candidate.findByIdAndDelete(candidateId)
+    if(!response){
+        return res.status(404).json({error:'Candidate not found'})
+    }
+    console.log("candidat deleted",response)
     res.status(200).json({message:"Caandidate updated"})
 
   } catch (error) {
