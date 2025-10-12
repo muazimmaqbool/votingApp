@@ -18,7 +18,7 @@ const checkAdminRole = async (userId) => {
 };
 
 //post request/api for candidate
-router.post("/", async (req, res) => {
+router.post("/",jwtAuthMiddleware, async (req, res) => {
   try {
     //checking whether the user is admin or not
     if(!checkAdminRole(req.user.id)){
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 });
 
 //used to update candidate data by candidate id
-router.put("/:candidateID", async (req, res) => {
+router.put("/:candidateID",jwtAuthMiddleware, async (req, res) => {
   try {
     if(!checkAdminRole(req.params.candidateID)){
         return res.status(403).json({message:'user is not a admin!'})
@@ -63,7 +63,7 @@ router.put("/:candidateID", async (req, res) => {
 });
 
 //delete route for deleting candidate
-router.delete("/:candidateID", async (req, res) => {
+router.delete("/:candidateID",jwtAuthMiddleware, async (req, res) => {
   try {
     if(!checkAdminRole(req.params.candidateID)){
         return res.status(403).json({message:'user is not a admin!'})

@@ -4,7 +4,7 @@ const app = express();
 const db = require("./db");
 require("dotenv").config()
 
-const {jwtAuthMiddleware}=require("./jwt")
+// const {jwtAuthMiddleware}=require("./jwt")
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json()); //here it will convert the json string/data to js object and save it inside: req.body
@@ -17,7 +17,8 @@ const candidateRoutes=require("./Routes/candidateRoute")
 //using the routers
 app.use('/user',userRoutes)
 //now every operation/request which goes through /candidate API requires jwt Token
-app.use('/candidate',jwtAuthMiddleware,candidateRoutes)
+//Now jwtAuthMiddleware is applied inside candidateRoutes.js file
+app.use('/candidate',candidateRoutes)
 
 
 
