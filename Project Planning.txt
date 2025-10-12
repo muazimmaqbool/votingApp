@@ -70,4 +70,5 @@
         16)Create a function which make sure that only admin is doing some specific operations : like creating a candidate extracting
                 this functions is inside candidateRoute.js
         17)Candidates routes for updating and deleteing the data
-        18)
+        18)Making sure in userRoutes.js not two users can have admin role i.e only one admin
+        19)Creating route for getting all candidates

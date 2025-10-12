@@ -92,8 +92,10 @@ router.get("/all", jwtAuthMiddleware, async (req, res) => {
     if (!(await checkAdminRole(req.user.id))) {
       return res.status(403).json({ message: "user is not a admin!" });
     }
-    const allCandidates=await Candidate.find()
+    //const allCandidates=await Candidate.find()
+    const allCandidates = await Candidate.find().select("name party");//returns only name and party of the candidates
     res.status(200).json(allCandidates)
+    //or
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
