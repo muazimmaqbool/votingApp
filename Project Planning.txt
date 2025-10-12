@@ -66,4 +66,6 @@
         12)Implement candidateRoute.js file
         13)Import 'jwtAuthMiddleware' inside server.js file
         14)Using 'jwtAuthMiddleware' on routes of candidate
-        15)
+        15)Creating POST request in candidate route
+        16)Create a function which make sure that only admin is doing some specific operations : like creating a candidate extracting
+                this functions is inside candidateRoute.js
