@@ -1,26 +1,33 @@
-const express=require('express');
-const router=express.Router();//used to manage routes
-const User=require("../Models/user")
-const {jwtAuthMiddleware,generateToken}=require("../jwt")
+const express = require("express");
+const router = express.Router(); //used to manage routes
+const User = require("../Models/user");
+const { jwtAuthMiddleware, generateToken } = require("../jwt");
 
-//POST request (singup route) 
+//POST request (singup route)
 //api like thid: /user/singup
 router.post("/signup", async (req, res) => {
   try {
     //extracting data from request body
-    const data=req.body;
+    const data = req.body;
 
-    const newUser=new User(data)//creating new user document using User model
+    // Check if there is already an admin user
+    const adminUser = await User.findOne({ role: "admin" });
+    if (data.role === "admin" && adminUser) {
+      return res.status(400).json({ error: "Admin user already exists" });
+    }
+
+    const newUser = new User(data); //creating new user document using User model
 
     //saving this new user to the database
-    const response=await newUser.save();
+    const response = await newUser.save();
     // console.log("newuser saved:",response)
 
-    const payLoad={ //only user id will be in the payload
-        id:response.id
-    }
-    const token=generateToken(payLoad)
-    res.status(200).json({response:response,token:token})
+    const payLoad = {
+      //only user id will be in the payload
+      id: response.id,
+    };
+    const token = generateToken(payLoad);
+    res.status(200).json({ response: response, token: token });
   } catch (err) {
     console.error("Error during saving user:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -28,70 +35,70 @@ router.post("/signup", async (req, res) => {
 });
 
 //login route
-router.post('/login',async(req,res)=>{
-    try{
-        //getting aadhardCardNumber and password
-        const{aadharCardNumber,password}=req.body;
+router.post("/login", async (req, res) => {
+  try {
+    //getting aadhardCardNumber and password
+    const { aadharCardNumber, password } = req.body;
 
-        //getting user by aadharCardNumber
-        const user=await User.findOne({aadharCardNumber:aadharCardNumber})
+    //getting user by aadharCardNumber
+    const user = await User.findOne({ aadharCardNumber: aadharCardNumber });
 
-        //if user is not found or either password or aadharCardNumber is wrong
-        if(!user || !(await user.comparePassword(password))){
-            return res.status(401).json("Invalid username or password")
-        }
-
-        const payload={
-            id:user.id
-        }
-        const token=generateToken(payload)
-        res.status(200).json({token})
-    }catch(err){
-        console.log("Error during login:",err);
-        res.status(500).json({error:"Internal server error"})
+    //if user is not found or either password or aadharCardNumber is wrong
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json("Invalid username or password");
     }
-})
+
+    const payload = {
+      id: user.id,
+    };
+    const token = generateToken(payload);
+    res.status(200).json({ token });
+  } catch (err) {
+    console.log("Error during login:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 //profile route
-router.get('/profile',jwtAuthMiddleware,async(req,res)=>{
-  try{
-    const userData=req.user //basically payload from jwt token
+router.get("/profile", jwtAuthMiddleware, async (req, res) => {
+  try {
+    const userData = req.user; //basically payload from jwt token
     //getting id
-    const userId=userData.id;
+    const userId = userData.id;
     //getting user details
-    const user=await Person.findById(userId)
-    res.status(200).json({userProfile:user})
-  }catch(err){
-    console.log(err)
-    res.status(500).json({error:"Internal server error"})
+    const user = await Person.findById(userId);
+    res.status(200).json({ userProfile: user });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
   }
-})
+});
 
 //route to change the password
-router.put("/profile/password",jwtAuthMiddleware, async (req, res) => {
+router.put("/profile/password", jwtAuthMiddleware, async (req, res) => {
   try {
     const userID = req.user; //getting the id from the jwt payload
 
     //getting currentpassword and new password from request body
-    const{currentPassword,newPassword}=req.body;
+    const { currentPassword, newPassword } = req.body;
 
     //checking the user is preent or not by the userId
-    const user=await User.findById(userID)
+    const user = await User.findById(userID);
 
     //if current password doesn't match then return error
-    if(!(await User.comparePassword(currentPassword))){
-      return res.status(401).json({error:"Invalid current password!"})
+    if (!(await User.comparePassword(currentPassword))) {
+      return res.status(401).json({ error: "Invalid current password!" });
     }
 
     //updating users password
-    user.password=newPassword
-    await user.save()
-     
+    user.password = newPassword;
+    await user.save();
+
     console.log("Password Updated");
-    res.status(200).json({message:"Password updated"});
+    res.status(200).json({ message: "Password updated" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-module.exports=router
+module.exports = router;
