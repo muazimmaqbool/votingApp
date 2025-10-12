@@ -21,7 +21,7 @@ const checkAdminRole = async (userId) => {
 router.post("/",jwtAuthMiddleware, async (req, res) => {
   try {
     //checking whether the user is admin or not
-    if(!checkAdminRole(req.user.id)){
+    if(! await checkAdminRole(req.user.id)){
         return res.status(403).json({message:'user is not a admin!'})
     }
     const data = req.body; //geting candidate data from request body
@@ -38,7 +38,7 @@ router.post("/",jwtAuthMiddleware, async (req, res) => {
 //used to update candidate data by candidate id
 router.put("/:candidateID",jwtAuthMiddleware, async (req, res) => {
   try {
-    if(!checkAdminRole(req.params.candidateID)){
+    if(! await checkAdminRole(req.user.id)){
         return res.status(403).json({message:'user is not a admin!'})
     }
     //getting ID
@@ -65,7 +65,7 @@ router.put("/:candidateID",jwtAuthMiddleware, async (req, res) => {
 //delete route for deleting candidate
 router.delete("/:candidateID",jwtAuthMiddleware, async (req, res) => {
   try {
-    if(!checkAdminRole(req.params.candidateID)){
+    if(! await checkAdminRole(req.user.id)){
         return res.status(403).json({message:'user is not a admin!'})
     }
     //getting ID
@@ -76,8 +76,8 @@ router.delete("/:candidateID",jwtAuthMiddleware, async (req, res) => {
     if(!response){
         return res.status(404).json({error:'Candidate not found'})
     }
-    console.log("candidat deleted",response)
-    res.status(200).json({message:"Caandidate updated"})
+    // console.log("candidat deleted")  
+    res.status(200).json({message:"Caandidate deleted"})
 
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
