@@ -10,19 +10,19 @@ const User = require("../Models/user");
 
 const checkAdminRole = async (userId) => {
   try {
-    const user=await User.findById(userId);
-    return user.role==="admin"; //becomes true when user role is admin
+    const user = await User.findById(userId);
+    return user.role === "admin"; //becomes true when user role is admin
   } catch (err) {
     return false;
   }
 };
 
 //post request/api for candidate
-router.post("/",jwtAuthMiddleware, async (req, res) => {
+router.post("/", jwtAuthMiddleware, async (req, res) => {
   try {
     //checking whether the user is admin or not
-    if(! await checkAdminRole(req.user.id)){
-        return res.status(403).json({message:'user is not a admin!'})
+    if (!(await checkAdminRole(req.user.id))) {
+      return res.status(403).json({ message: "user is not a admin!" });
     }
     const data = req.body; //geting candidate data from request body
     const newCandidate = new Candidate(data); //creating a new candidate document model
@@ -36,52 +36,66 @@ router.post("/",jwtAuthMiddleware, async (req, res) => {
 });
 
 //used to update candidate data by candidate id
-router.put("/:candidateID",jwtAuthMiddleware, async (req, res) => {
+router.put("/:candidateID", jwtAuthMiddleware, async (req, res) => {
   try {
-    if(! await checkAdminRole(req.user.id)){
-        return res.status(403).json({message:'user is not a admin!'})
+    if (!(await checkAdminRole(req.user.id))) {
+      return res.status(403).json({ message: "user is not a admin!" });
     }
     //getting ID
-    const candidateId=req.params.candidateID;
+    const candidateId = req.params.candidateID;
     //getting updated data of candidate
-    const updatedCandidateData=req.body
+    const updatedCandidateData = req.body;
 
     //saving candidate data
-    const response=await Candidate.findByIdAndUpdate(candidateId,updatedCandidateData,{
-        new:true, //will return the updated data
-        runValidators:true, //runs data validation which is already setup in candidate.js model
-    })
-    if(!response){
-        return res.status(403).json({error:'Candidate not found'})
+    const response = await Candidate.findByIdAndUpdate(
+      candidateId,
+      updatedCandidateData,
+      {
+        new: true, //will return the updated data
+        runValidators: true, //runs data validation which is already setup in candidate.js model
+      }
+    );
+    if (!response) {
+      return res.status(403).json({ error: "Candidate not found" });
     }
-    console.log("candidate dara updated",response)
-    res.status(200).json({message:"Caandidate updated"})
-
+    console.log("candidate dara updated", response);
+    res.status(200).json({ message: "Caandidate updated" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
 //delete route for deleting candidate
-router.delete("/:candidateID",jwtAuthMiddleware, async (req, res) => {
+router.delete("/:candidateID", jwtAuthMiddleware, async (req, res) => {
   try {
-    if(! await checkAdminRole(req.user.id)){
-        return res.status(403).json({message:'user is not a admin!'})
+    if (!(await checkAdminRole(req.user.id))) {
+      return res.status(403).json({ message: "user is not a admin!" });
     }
     //getting ID
-    const candidateId=req.params.candidateID;
+    const candidateId = req.params.candidateID;
 
-    //deleting 
-    const response=await Candidate.findByIdAndDelete(candidateId)
-    if(!response){
-        return res.status(404).json({error:'Candidate not found'})
+    //deleting
+    const response = await Candidate.findByIdAndDelete(candidateId);
+    if (!response) {
+      return res.status(404).json({ error: "Candidate not found" });
     }
-    // console.log("candidat deleted")  
-    res.status(200).json({message:"Caandidate deleted"})
-
+    // console.log("candidat deleted")
+    res.status(200).json({ message: "Caandidate deleted" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
+//getting list of candidates: (..../candidate/all)
+router.get("/all", jwtAuthMiddleware, async (req, res) => {
+  try {
+    if (!(await checkAdminRole(req.user.id))) {
+      return res.status(403).json({ message: "user is not a admin!" });
+    }
+    const allCandidates=await Candidate.find()
+    res.status(200).json(allCandidates)
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = router;
