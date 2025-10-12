@@ -100,4 +100,49 @@ router.get("/all", jwtAuthMiddleware, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
+//voting routes
+//here in this route we will do: 1)Admin can't vote, 2)users can only vote,
+router.post('/vote/:candidateId',jwtAuthMiddleware,async(req,res)=>{
+    //getting candidate id from params and user id who is voting via jwt token's payload
+    const candidateId=req.params.candidateId;
+    const userId=req.user.id
+    try{
+        //getting candidate who's id is passed
+        const candidate=await Candidate.findById(candidateId)
+        if(!candidate){
+            return res.status(404).json({message:"Candidate not found!"})
+        }
+        
+        //getting user who is voting
+        const user=User.findById(userId)
+        if(!user){
+            return res.status(404).json({message:"User not found!"})
+        }
+
+        //checking if user has already voted or not
+        if(user.isVoted){
+            return res.status(400).json({message:"You have already voted!"})
+        }
+
+        //making sure admin is not allowed to vote
+        if(user.role==="admin"){
+            return res.status(403).json({message:"Admin is not allowed to vote!"})
+        }
+
+        //updating candidate document when a user votes to record the vote
+        candidate.votes.push({user:userId}) //recording to voted
+        candidate.voteCount++; //updating vote cound of the candidate
+        await candidate.save()
+
+        //updating user document to update a user who vote
+        user.isVoted=true;
+        await user.save()
+
+        res.status(200).json({message:"Vote recorded successfully"})
+    }catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+})
 module.exports = router;
