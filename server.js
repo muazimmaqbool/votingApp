@@ -13,6 +13,7 @@ const PORT=process.env.PORT || 3000
 //importing router files
 const userRoutes=require("./Routes/userRoutes")
 const candidateRoutes=require("./Routes/candidateRoute")
+
 //using the routers
 app.use('/user',userRoutes)
 //now every operation/request which goes through /candidate API requires jwt Token

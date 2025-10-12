@@ -65,3 +65,5 @@
                 pokemon
         12)Implement candidateRoute.js file
         13)Import 'jwtAuthMiddleware' inside server.js file
+        14)Using 'jwtAuthMiddleware' on routes of candidate
+        15)
