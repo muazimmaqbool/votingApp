@@ -93,56 +93,74 @@ router.get("/all", jwtAuthMiddleware, async (req, res) => {
       return res.status(403).json({ message: "user is not a admin!" });
     }
     //const allCandidates=await Candidate.find()
-    const allCandidates = await Candidate.find().select("name party");//returns only name and party of the candidates
-    res.status(200).json(allCandidates)
+    const allCandidates = await Candidate.find().select("name party"); //returns only name and party of the candidates
+    res.status(200).json(allCandidates);
     //or
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-
 //voting routes
 //here in this route we will do: 1)Admin can't vote, 2)users can only vote,
-router.post('/vote/:candidateId',jwtAuthMiddleware,async(req,res)=>{
-    //getting candidate id from params and user id who is voting via jwt token's payload
-    const candidateId=req.params.candidateId;
-    const userId=req.user.id
-    try{
-        //getting candidate who's id is passed
-        const candidate=await Candidate.findById(candidateId)
-        if(!candidate){
-            return res.status(404).json({message:"Candidate not found!"})
-        }
-        
-        //getting user who is voting
-        const user=User.findById(userId)
-        if(!user){
-            return res.status(404).json({message:"User not found!"})
-        }
+router.post("/vote/:candidateId", jwtAuthMiddleware, async (req, res) => {
+  //getting candidate id from params and user id who is voting via jwt token's payload
+  const candidateId = req.params.candidateId;
+  const userId = req.user.id;
+  try {
+    //getting candidate who's id is passed
+    const candidate = await Candidate.findById(candidateId);
+    if (!candidate) {
+      return res.status(404).json({ message: "Candidate not found!" });
+    }
 
-        //checking if user has already voted or not
-        if(user.isVoted){
-            return res.status(400).json({message:"You have already voted!"})
-        }
+    //getting user who is voting
+    const user =await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
 
-        //making sure admin is not allowed to vote
-        if(user.role==="admin"){
-            return res.status(403).json({message:"Admin is not allowed to vote!"})
-        }
+    //checking if user has already voted or not
+    if (user.isVoted) {
+      return res.status(400).json({ message: "You have already voted!" });
+    }
 
-        //updating candidate document when a user votes to record the vote
-        candidate.votes.push({user:userId}) //recording to voted
-        candidate.voteCount++; //updating vote cound of the candidate
-        await candidate.save()
+    //making sure admin is not allowed to vote
+    if (user.role === "admin") {
+      return res.status(403).json({ message: "Admin is not allowed to vote!" });
+    }
 
-        //updating user document to update a user who vote
-        user.isVoted=true;
-        await user.save()
+    //updating candidate document when a user votes to record the vote
+    candidate.votes.push({ user: userId }); //recording to voted
+    candidate.voteCount++; //updating vote cound of the candidate
+    await candidate.save();
 
-        res.status(200).json({message:"Vote recorded successfully"})
-    }catch (error) {
+    //updating user document to update a user who vote
+    user.isVoted = true;
+    await user.save();
+
+    res.status(200).json({ message: "Vote recorded successfully" });
+  } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
-})
+});
+
+//getting vote count
+//This route will return the vote count of each party and in sorted order
+router.get("/vote/count", async (req, res) => {
+  try {
+    const allCandidates = await Candidate.find().sort({ voteCount: "desc" });
+    //returning only name of the part and vote count
+    const voteRecord = allCandidates.map((data) => {
+      return {
+        party: data?.party,
+        count: data?.voteCount,
+      };
+    });
+    res.status(200).json(voteRecord);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;

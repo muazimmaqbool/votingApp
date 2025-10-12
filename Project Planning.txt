@@ -72,3 +72,5 @@
         17)Candidates routes for updating and deleteing the data
         18)Making sure in userRoutes.js not two users can have admin role i.e only one admin
         19)Creating route for getting all candidates
+        20)implemented route inside candidateRoutes for recording vote
+        21)Implemented route for returning vote cound of a candidate
