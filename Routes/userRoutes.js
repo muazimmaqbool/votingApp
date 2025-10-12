@@ -101,4 +101,13 @@ router.put("/profile/password", jwtAuthMiddleware, async (req, res) => {
   }
 });
 
+//getting list of users/voters
+router.get('/all',jwtAuthMiddleware,async(re1,res)=>{
+  try{
+    const allVoters=await User.find({role:"voter"})
+    res.status(200).json(allVoters)
+  }catch(error){
+    res.status(500).json({error:"Internal server error"})
+  }
+})
 module.exports = router;
