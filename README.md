@@ -1,97 +1,196 @@
-# Voting Application (Backend Only)
+# 🗳️ Voting Application (Backend Only)
 
-## 1. About Project
+## 1. About the Project
 
-This project is a backend-only implementation of a voting application. Its primary goal is to provide functionality where users can cast their vote for a given set of candidates. The focus is on building robust **models** and **routes** to support the voting process while enforcing appropriate access control and business logic.
+This project is a **backend-only** implementation of a voting system where users can register, log in, and cast votes for candidates. It focuses on building secure APIs using **Node.js**, **Express.js**, and **MongoDB (Mongoose)**, while enforcing proper authentication and authorization.
+
+The application includes an **admin** role for managing candidates and a **user** role for voting.
 
 ---
 
 ## 2. Functionality
 
-- **User Sign Up & Sign In**
-  - Users can create an account and log in using their Aadhar card number (as a unique government ID) and password.
-- **View Candidates**
-  - Users can view the list of all available candidates.
-- **Voting**
-  - Each user can vote for one candidate only; after voting, the user cannot vote again.
-- **Live Vote Counts**
-  - There is a route to fetch all candidates sorted by their current vote counts, updated live.
-- **User Data**
-  - Each user's record includes one unique government ID proof (e.g., Aadhar card number).
-- **Admin Role**
-  - There is a single admin account that can manage the candidate table (add/update/delete candidates) but cannot vote.
-- **Password Management**
-  - Users can change their passwords.
-- **Authentication**
-  - Login is only possible using Aadhar card number and password.
-- **Voting Restrictions**
-  - Admin cannot vote under any circumstances.
+### 👤 User Features
+- **Sign Up / Sign In** using **Aadhar card number** and password  
+- **View all candidates** available for voting  
+- **Vote for one candidate only** (cannot vote again)  
+- **View own profile** and **change password**
+
+### 🧑‍💼 Admin Features
+- **Add / Update / Delete candidates**
+- Cannot vote
+
+### ⚙️ General
+- **Live vote counts** sorted by number of votes  
+- **Unique government ID (Aadhar)** per user  
+- **Authentication** and **Authorization** enforced with JWT  
 
 ---
 
-## 3. Routes (APIs)
+## 3. Tech Stack
 
-Below are the required API endpoints to implement the described functionality:
-
-### 1) User Authentication
-
-- `POST /signup`  
-  Create a new user account.
-
-- `POST /login`  
-  Log in to an existing account.  
-  **Credentials:** Aadhar card number + password
+| Tool | Purpose |
+|------|----------|
+| **Node.js** | Backend runtime environment |
+| **Express.js** | Web framework for creating routes and APIs |
+| **MongoDB** | Database for storing users, candidates, and votes |
+| **Mongoose** | ODM for MongoDB |
+| **VS Code (or any IDE)** | Code editor |
+| **Postman** | API testing tool |
 
 ---
 
-### 2) Voting
+## 4. Prerequisites
 
-- `GET /candidates`  
-  Get the list of all candidates.
+Before running this project, make sure you have the following installed:
 
-- `POST /vote/:candidateId`  
-  Vote for a specific candidate by their ID.
-
----
-
-### 3) Vote Counts
-
-- `GET /vote/counts`  
-  Retrieve the list of candidates sorted by their vote counts (live results).
+- [Node.js](https://nodejs.org/) (v16 or above)
+- [MongoDB](https://www.mongodb.com/try/download/community)
+- [VS Code](https://code.visualstudio.com/) (or any text editor)
+- [Postman](https://www.postman.com/downloads/) for API testing
 
 ---
 
-### 4) User Profile
+## 5. Installation & Setup
 
-- `GET /profile`  
-  Retrieve the logged-in user's profile information.
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/your-username/voting-app.git
+cd voting-app
+```
 
-- `PUT /profile/password`  
-  Change the user's password.
+### Step 2: Install Dependencies
+```bash
+npm install
+```
+
+### Step 3: Setup Environment Variables
+Create a `.env` file in the project root and add the following:
+```
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/votingApp
+JWT_SECRET=yourSecretKey
+```
+
+### Step 4: Start MongoDB
+If MongoDB is running locally:
+```bash
+mongod
+```
+
+### Step 5: Run the Application
+```bash
+npm start
+```
+Server will start on:
+```
+http://localhost:5000
+```
 
 ---
 
-### 5) Admin Candidate Management
+## 6. Routes (APIs)
 
-- `POST /candidates`  
-  Create a new candidate.  
-  **(Admin only)**
-
-- `PUT /candidates/:candidateId`  
-  Update an existing candidate.  
-  **(Admin only)**
-
-- `DELETE /candidates/:candidateId`  
-  Delete a candidate from the list.  
-  **(Admin only)**
+### 1) **User Authentication**
+| Method | Route | Description |
+|--------|--------|-------------|
+| `POST` | `/signup` | Register a new user |
+| `POST` | `/login` | Log in using Aadhar number & password |
 
 ---
 
-## Additional Notes
-
-- Ensure all sensitive actions are authenticated and authorized.
-- Only the admin can manage candidates; only users can vote.
-- Each user must have exactly one unique government ID proof.
-- No user (including admin) can vote more than once.
+### 2) **Voting**
+| Method | Route | Description |
+|--------|--------|-------------|
+| `GET` | `/candidates` | View all candidates |
+| `POST` | `/vote/:candidateId` | Vote for a specific candidate |
 
 ---
+
+### 3) **Vote Counts**
+| Method | Route | Description |
+|--------|--------|-------------|
+| `GET` | `/vote/counts` | Get live vote counts (sorted) |
+
+---
+
+### 4) **User Profile**
+| Method | Route | Description |
+|--------|--------|-------------|
+| `GET` | `/profile` | Get logged-in user's profile |
+| `PUT` | `/profile/password` | Change password |
+
+---
+
+### 5) **Admin Candidate Management**
+| Method | Route | Description |
+|--------|--------|-------------|
+| `POST` | `/candidates` | Add new candidate (**Admin only**) |
+| `PUT` | `/candidates/:candidateId` | Update candidate (**Admin only**) |
+| `DELETE` | `/candidates/:candidateId` | Delete candidate (**Admin only**) |
+
+---
+
+### 6) **Additional Route**
+| Method | Route | Description |
+|--------|--------|-------------|
+| `GET` | `/user/all` | Fetch all registered users (for debugging/admin view) |
+
+---
+
+## 7. Testing in Postman
+
+### Step 1: Open Postman  
+Download and open **Postman**.
+
+### Step 2: Create a New Request  
+- Click **New → HTTP Request**  
+- Enter the URL (e.g. `http://localhost:5000/signup`)  
+- Select method (`POST`, `GET`, etc.)  
+- Add **Headers**:
+  ```
+  Content-Type: application/json
+  Authorization: Bearer <your_JWT_token>   // only for protected routes
+  ```
+
+### Step 3: Example Requests
+
+#### ➤ Signup (POST)
+**URL:** `http://localhost:5000/signup`  
+**Body (JSON):**
+```json
+{
+  "name": "John Doe",
+  "aadhar": "123456789012",
+  "password": "password123",
+  "role": "user"
+}
+```
+
+#### ➤ Login (POST)
+**URL:** `http://localhost:5000/login`  
+**Body (JSON):**
+```json
+{
+  "aadhar": "123456789012",
+  "password": "password123"
+}
+```
+**Response:** will include a JWT token.
+
+#### ➤ Get All Users (GET)
+**URL:** `http://localhost:5000/user/all`  
+**Headers:**
+```
+Authorization: Bearer <JWT_token>
+```
+
+#### ➤ Vote (POST)
+**URL:** `http://localhost:5000/vote/<candidateId>`
+
+---
+
+## 8. Notes
+- Make sure MongoDB is running before starting the server.
+- Protected routes require a valid **JWT token** (returned from `/login`).
+- Admin users should be manually assigned via database if not handled via signup.
