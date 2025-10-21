@@ -21,7 +21,6 @@ app.use('/user',userRoutes)
 app.use('/candidate',candidateRoutes)
 
 
-
 //just for testing: http://localhost:3000/
 app.get("/", (req, res) => {
   res.send("backend project...");
