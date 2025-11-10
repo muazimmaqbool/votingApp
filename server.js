@@ -23,7 +23,7 @@ app.use('/candidate',candidateRoutes)
 
 //just for testing: http://localhost:3000/
 app.get("/", (req, res) => {
-  res.send("backend project...");
+  res.send("Voting App Backend...");
 });
 
 app.listen(PORT, () => {
