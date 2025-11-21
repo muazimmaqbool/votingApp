@@ -50,9 +50,10 @@ router.post("/login", async (req, res) => {
 
     const payload = {
       id: user.id,
+      role:user.role,
     };
     const token = generateToken(payload);
-    res.status(200).json({ token });
+    res.status(200).json({ token :token,name:user.name,role:user.role});
   } catch (err) {
     console.log("Error during login:", err);
     res.status(500).json({ error: "Internal server error" });

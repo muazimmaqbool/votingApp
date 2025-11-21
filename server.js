@@ -1,10 +1,16 @@
+const cors =require("cors")
 const express = require("express");
 const app = express();
 //importing database connection
 const db = require("./db");
 require("dotenv").config()
 
+
 // const {jwtAuthMiddleware}=require("./jwt")
+app.use(cors({
+  origin: "http://localhost:5173",  // currently allowing to this url only
+  credentials: true
+}));
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json()); //here it will convert the json string/data to js object and save it inside: req.body
