@@ -67,7 +67,8 @@ router.get("/profile", jwtAuthMiddleware, async (req, res) => {
     //getting id
     const userId = userData.id;
     //getting user details
-    const user = await Person.findById(userId);
+    const user = await User.findById(userId);
+    // console.log("user:",user)
     res.status(200).json({ userProfile: user });
   } catch (err) {
     console.log(err);
