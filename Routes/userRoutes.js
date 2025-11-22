@@ -103,6 +103,31 @@ router.put("/profile/password", jwtAuthMiddleware, async (req, res) => {
   }
 });
 
+//updating user profile by user id
+router.put("/:userID", jwtAuthMiddleware, async (req, res) => {
+  try {
+    const userId = req.params.userID;
+    const updatedUserData = req.body;
+    //saving candidate data
+    const response = await User.findByIdAndUpdate(
+      userId,
+      updatedUserData,
+      {
+        new: true, //will return the updated data
+        runValidators: true, //runs data validation which is already setup
+      }
+    );
+    // console.log("response:",response)
+    if (!response) {
+      return res.status(403).json({ error: "User not found" });
+    }
+    // console.log("candidate dara updated", response);
+    res.status(200).json({ message: "User profile updated" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //getting list of users/voters
 router.get('/all',jwtAuthMiddleware,async(re1,res)=>{
   try{
