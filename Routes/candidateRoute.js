@@ -58,7 +58,7 @@ router.put("/:candidateID", jwtAuthMiddleware, async (req, res) => {
     if (!response) {
       return res.status(403).json({ error: "Candidate not found" });
     }
-    console.log("candidate dara updated", response);
+    // console.log("candidate dara updated", response);
     res.status(200).json({ message: "Caandidate updated" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
@@ -80,7 +80,7 @@ router.delete("/:candidateID", jwtAuthMiddleware, async (req, res) => {
       return res.status(404).json({ error: "Candidate not found" });
     }
     // console.log("candidat deleted")
-    res.status(200).json({ message: "Caandidate deleted" });
+    res.status(200).json({ message: "Candidate deleted" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -93,7 +93,7 @@ router.get("/all", jwtAuthMiddleware, async (req, res) => {
     //   return res.status(403).json({ message: "user is not a admin!" });
     // }
     //const allCandidates=await Candidate.find()
-    const allCandidates = await Candidate.find().select("name party"); //returns only name and party of the candidates
+    const allCandidates = await Candidate.find().select("name party age voteCount"); //returns only name and party of the candidates
     res.status(200).json(allCandidates);
     //or
   } catch (error) {
