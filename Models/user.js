@@ -72,6 +72,7 @@ userSchema.pre('save',async function(next){
 //method comparePassword used to compare password entered by the user with the hashed password in db
 userSchema.methods.comparePassword=async function(candidatePassword){
     try{
+        // console.log("candidatePassword:",candidatePassword)
         //using bycrypt to compare provided password with hashed password
         const isMatch=await bycrypt.compare(candidatePassword,this.password)
         return isMatch;

@@ -80,15 +80,20 @@ router.get("/profile", jwtAuthMiddleware, async (req, res) => {
 router.put("/profile/password", jwtAuthMiddleware, async (req, res) => {
   try {
     const userID = req.user; //getting the id from the jwt payload
-
     //getting currentpassword and new password from request body
     const { currentPassword, newPassword } = req.body;
-
+    // console.log("currentPassword:",currentPassword)
+    // console.log("newPassword:",newPassword)
+    const id=userID?.id;
+    // console.log("id:",id)
     //checking the user is preent or not by the userId
-    const user = await User.findById(userID);
+    const user = await User.findById(id);
+    // console.log("user:",user)
+    
 
     //if current password doesn't match then return error
-    if (!(await User.comparePassword(currentPassword))) {
+    if (!(await user.comparePassword(currentPassword))) {
+      console.log("called...")
       return res.status(401).json({ error: "Invalid current password!" });
     }
 
