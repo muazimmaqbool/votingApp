@@ -9,7 +9,7 @@ require("dotenv").config()
 // const {jwtAuthMiddleware}=require("./jwt")
 app.use(cors({
   //origin: "http://localhost:5173",  // currently allowing to this url only
-  origin:"https://692a92ed701ee32dadc6fc5f--votingappfront.netlify.app/",
+  origin:"https://votingappfront.netlify.app/",
   credentials: true
 }));
 
