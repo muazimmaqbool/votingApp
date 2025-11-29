@@ -4,13 +4,13 @@ require("dotenv").config();
 //Note:-> the mongodb server runs on this port: mongodb://localhost:27017/dbName
 
 //step 1: Defining the MongoDB connection URl:
-//const mongoDbURL='mongodb://localhost:27017/hotels' //here hotels can be any name
-const mongoDbURL=process.env.LOCAL_DB_URL
+// const mongoDbURL=process.env.LOCAL_DB_URL
+const mongoDbURL=process.env.ONLINE_DB_URL
 
 //these two paramters are passed because otherwise you will get some warning, they make sure that you are working with latest versions
 mongoose.connect(mongoDbURL,{
      useNewUrlParser: true,
-   //  useUnifiedTopology: true, //when using local DB connnection comment this line
+    useUnifiedTopology: true, //when using local DB connnection comment this line
 })
 .then(() => console.log("Connected to MongoDB server!"))
 .catch((error) => console.log("MongoDB server connection error:", error));
@@ -36,7 +36,6 @@ db.on('error',(error)=>{
 db.on('disconnected',()=>{
     console.log("MongoDB Server is disconnected!")
 })
-
 
 //step 5: Export the database connection:
 /*
